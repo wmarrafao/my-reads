@@ -1,19 +1,26 @@
 import React from 'react'
-//import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from './utils/BooksAPI'
 import BookShelf from './BookShelf'
 import Book from './Book'
-import books from './utils/books'
 import './App.css'
 
 class ListBooks extends React.Component {
   state = {
-    books: books
+    books: []
+  }
+
+  componentDidMount() {
+    BooksAPI.getAll().then( (books) => {
+      this.setState({ books })
+    })
   }
 
   render () {
-    let currentlyReading = this.state.books.filter( book => book.props.shelf === "Currently Reading")
-    let wantToRead = this.state.books.filter( book => book.props.shelf === "Want to Read")
-    let read = this.state.books.filter( book => book.props.shelf === "Read")
+     let currentlyReading = this.state.books.filter( book => book.shelf === "currentlyReading")
+     let wantToRead = this.state.books.filter( book => book.shelf === "wantToRead")
+     let read = this.state.books.filter( book => book.shelf === "read")
+
+     console.log(currentlyReading)
 
     return (
       <div>
@@ -22,13 +29,10 @@ class ListBooks extends React.Component {
             <h1>MyReads</h1>
           </div>
           <div className="list-books-content">
-            {<BookShelf shelfTitle="Currently Reading" books={currentlyReading}/>}
-            {<BookShelf shelfTitle="Want to Read" books={wantToRead}/>}
-            {<BookShelf shelfTitle="Read" books={read}/>}
+            {<BookShelf title="Currently Reading" books={currentlyReading}/>}
+            {<BookShelf title="Want to Read" books={wantToRead}/>}
+            {<BookShelf title="Read" books={read}/>}
           </div>
-        </div>
-        <div className="open-search">
-          <a onClick={() => console.log("Search Clicked!")}>Add a book</a>
         </div>
       </div>
     )
