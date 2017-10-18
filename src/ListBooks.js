@@ -5,22 +5,28 @@ import Book from './Book'
 import './App.css'
 
 class ListBooks extends React.Component {
-  state = {
-    books: []
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      currentlyReading: this.props.books.filter( book => book.shelf === "currentlyReading"),
+      wantToRead: this.props.books.filter( book => book.shelf === "wantToRead"),
+      read: this.props.books.filter( book => book.shelf === "read")
+    }
   }
 
-  componentDidMount() {
-    BooksAPI.getAll().then( (books) => {
-      this.setState({ books })
-    })
+  componentWillReceiveProps(nextProps) {
+    console.log(`receiveing nextProps.`)
+    if (this.props != nextProps) {
+      this.setState({
+        currentlyReading: nextProps.books.filter( book => book.shelf === "currentlyReading"),
+        wantToRead: nextProps.books.filter( book => book.shelf === "wantToRead"),
+        read: nextProps.books.filter( book => book.shelf === "read"),
+      })
+    }
   }
 
   render () {
-     let currentlyReading = this.state.books.filter( book => book.shelf === "currentlyReading")
-     let wantToRead = this.state.books.filter( book => book.shelf === "wantToRead")
-     let read = this.state.books.filter( book => book.shelf === "read")
-
-     console.log(currentlyReading)
 
     return (
       <div>
@@ -29,9 +35,9 @@ class ListBooks extends React.Component {
             <h1>MyReads</h1>
           </div>
           <div className="list-books-content">
-            {<BookShelf title="Currently Reading" books={currentlyReading}/>}
-            {<BookShelf title="Want to Read" books={wantToRead}/>}
-            {<BookShelf title="Read" books={read}/>}
+            {<BookShelf title="Currently Reading" books={this.state.currentlyReading} updateBookShelf={this.props.updateBookShelf}/>}
+            {<BookShelf title="Want to Read" books={this.state.wantToRead} updateBookShelf={this.props.updateBookShelf}/>}
+            {<BookShelf title="Read" books={this.state.read} updateBookShelf={this.props.updateBookShelf}/>}
           </div>
         </div>
       </div>

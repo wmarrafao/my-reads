@@ -1,22 +1,25 @@
 import React from 'react'
+import * as BooksAPI from './utils/BooksAPI'
 import './App.css'
 
 class Book extends React.Component {
   state = {
-    title: this.props.title,
-    author: this.props.author,
-    coverImgURL: this.props.coverImgURL,
-    shelf: this.props.shelf,
+    shelf: ""
   }
+
+  componentDidMount() {
+    this.setState( {shelf: this.props.shelf} )
+  }
+
 
   render () {
     return (
       <div className="book">
         <div className="book-top">
-          <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.state.coverImgURL})` }}></div>
+          <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.props.coverImgURL})` }}></div>
           <div className="book-shelf-changer">
-            <select>
-              <option value="none" disabled>Move to...</option>
+            <select value={this.state.shelf} onChange={(event) => this.props.updateBookShelf(this.props, event.target.value)}>
+              <option value="none">Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
               <option value="wantToRead">Want to Read</option>
               <option value="read">Read</option>
@@ -24,8 +27,8 @@ class Book extends React.Component {
             </select>
           </div>
         </div>
-        <div className="book-title"> {this.state.title} </div>
-        <div className="book-authors"> {this.state.author} </div>
+        <div className="book-title"> {this.props.title} </div>
+        <div className="book-authors"> {this.props.authors} </div>
       </div>
     )
   }
