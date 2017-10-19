@@ -22,13 +22,18 @@ class SearchBooks extends React.Component {
     if (query != '') {
       console.log(`query = ${query}`)
       BooksAPI.search(query, 20).then( (books) => {
-        this.setState({ books: books, displayBooks: true })
+        let updatedBooks = books.map( (book) => {
+          let index = this.props.books.findIndex( (b) => b.id === book.id)
+          if (index !== -1) {
+            book.shelf = this.props.books[index].shelf
+          }
+          return book
+        })
+        this.setState({ books: updatedBooks, displayBooks: true })
       })
     } else {
       this.setState({ books: [], displayBooks: false })
     }
-
-
   }
 
   clearQuery = () => {
@@ -36,14 +41,6 @@ class SearchBooks extends React.Component {
   }
 
   render () {
-
-    let booksDisplayed = []
-    if (this.state.displayBooks == true && this.state.books.length > 0) {
-      booksDisplayed = this.state.books
-      booksDisplayed.sort(sortBy('title'))
-    }
-
-
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -60,9 +57,8 @@ class SearchBooks extends React.Component {
         <div className="search-books-results">
           <ol className="books-grid">
             {
-              booksDisplayed.map( (book) => (
+              this.state.books.map( (book) => (
                 <li key={book.id}>
-                  {/* call api getBook, then use shelf */}
                   <Book
                     id={book.id}
                     title={book.title? book.title : 'Not Avaliable'}
