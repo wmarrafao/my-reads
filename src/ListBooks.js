@@ -1,29 +1,25 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import * as BooksAPI from './utils/BooksAPI'
 import BookShelf from './BookShelf'
-import Book from './Book'
 import './App.css'
 
 class ListBooks extends React.Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       currentlyReading: this.props.books.filter( book => book.shelf === "currentlyReading"),
       wantToRead: this.props.books.filter( book => book.shelf === "wantToRead"),
       read: this.props.books.filter( book => book.shelf === "read")
-    }
+    };
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(`receiveing nextProps.`)
-    if (this.props != nextProps) {
+    if (this.props !== nextProps) {
       this.setState({
         currentlyReading: nextProps.books.filter( book => book.shelf === "currentlyReading"),
         wantToRead: nextProps.books.filter( book => book.shelf === "wantToRead"),
         read: nextProps.books.filter( book => book.shelf === "read"),
-      })
+      });
     }
   }
 
@@ -41,14 +37,12 @@ class ListBooks extends React.Component {
           </div>
         </div>
         <div className="open-search">
-          <Link
-            to='/search'
-            > Add a book
-          </Link>
+          <Link to='/search'> Add a book </Link>
         </div>
       </div>
     )
   }
 }
+
 
 export default ListBooks

@@ -1,20 +1,22 @@
 import React from 'react'
-import * as BooksAPI from './utils/BooksAPI'
 import './App.css'
 
 class Book extends React.Component {
-  state = {
-    shelf: ""
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      shelf: ""
+    };
   }
 
   componentDidMount() {
-    this.setState( {shelf: this.props.shelf} )
-    console.log(`${this.props.title} --> ${this.props.shelf}`)
+    this.setState( {shelf: this.props.shelf} );
   }
 
   updateShelf(shelf) {
-    this.setState({shelf})
-    this.props.updateBookShelf(this.props, shelf)
+    this.setState({shelf});
+    this.props.updateBookShelf(this.props, shelf);
   }
 
   render () {
@@ -38,5 +40,6 @@ class Book extends React.Component {
     )
   }
 }
+
 
 export default Book

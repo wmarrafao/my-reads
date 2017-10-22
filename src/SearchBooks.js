@@ -2,45 +2,53 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import * as BooksAPI from './utils/BooksAPI'
 import Book from './Book'
-import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
 import './App.css'
 
 class SearchBooks extends React.Component {
 
-  state = {
-    query: '',
-    books: [],
-    displayBooks: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      query: '',
+      books: [],
+      displayBooks: false
+    };
   }
 
   updateQuery = (query) => {
     this.setState({
       query: query
-    })
+    });
 
-    if (query != '') {
-      console.log(`query = ${query}`)
-      BooksAPI.search(query, 20).then( (books) => {
-        let updatedBooks = books.map( (book) => {
-          let index = this.props.books.findIndex( (b) => b.id === book.id)
-          if (index !== -1) {
-            book.shelf = this.props.books[index].shelf
-          }
-          return book
-        })
-        this.setState({ books: updatedBooks, displayBooks: true })
-      })
-    } else {
-      this.setState({ books: [], displayBooks: false })
+    if (query.length === 0) {
+      this.setState({ books: [], displayBooks: false });
+      return;
     }
-  }
 
-  clearQuery = () => {
-    this.setState({ query: '' })
+    //console.log(`query = ${query}`);
+    BooksAPI.search(query, 20).then( (books) => {
+      if (books.error) {
+        this.setState({ books: [], displayBooks: false });
+        return;
+      }
+      let updatedBooks = books.map( (book) => {
+        let index = this.props.books.findIndex( (b) => b.id === book.id);
+        if (index !== -1) {
+          book.shelf = this.props.books[index].shelf;
+        }
+        return book;
+      })
+      // making sure to display results if the query is the same when this callback was triggered
+      if (this.state.query === query) {
+        this.setState({ books: updatedBooks, displayBooks: true });
+      }
+    });
+
   }
 
   render () {
+    this.state.books.sort(sortBy('title'));
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -76,5 +84,6 @@ class SearchBooks extends React.Component {
     )
   }
 }
+
 
 export default SearchBooks
