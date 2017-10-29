@@ -31,9 +31,9 @@ class ListBooks extends React.Component {
             <h1>MyReads</h1>
           </div>
           <div className="list-books-content">
-            {<BookShelf title="Currently Reading" books={this.state.currentlyReading} updateBookShelf={this.props.updateBookShelf}/>}
-            {<BookShelf title="Want to Read" books={this.state.wantToRead} updateBookShelf={this.props.updateBookShelf}/>}
-            {<BookShelf title="Read" books={this.state.read} updateBookShelf={this.props.updateBookShelf}/>}
+            {<BookShelf title="Currently Reading" books={this.state.currentlyReading} updateBookShelf={this.props.updateBookShelf} displayBookDetails={this.props.displayBookDetails}/>}
+            {<BookShelf title="Want to Read" books={this.state.wantToRead} updateBookShelf={this.props.updateBookShelf} displayBookDetails={this.props.displayBookDetails}/>}
+            {<BookShelf title="Read" books={this.state.read} updateBookShelf={this.props.updateBookShelf} displayBookDetails={this.props.displayBookDetails}/>}
           </div>
         </div>
         <div className="open-search">

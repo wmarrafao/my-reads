@@ -39,7 +39,7 @@ class SearchBooks extends React.Component {
         }
         return book;
       })
-      // making sure to display results if the query is the same when this callback was triggered
+      // making sure to display results if the query is still the same when this callback was triggered
       if (this.state.query === query) {
         this.setState({ books: updatedBooks, displayBooks: true });
       }
@@ -74,6 +74,7 @@ class SearchBooks extends React.Component {
                     coverImgURL={book.imageLinks? book.imageLinks.smallThumbnail : '' }
                     shelf={book.shelf}
                     updateBookShelf={this.props.updateBookShelf}
+                    displayBookDetails={() => {}}
                   />
                 </li>
               ))

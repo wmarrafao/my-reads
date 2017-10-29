@@ -18,6 +18,7 @@ function BookShelf(props) {
                   coverImgURL={book.imageLinks? book.imageLinks.smallThumbnail : '' }
                   shelf={book.shelf}
                   updateBookShelf={props.updateBookShelf}
+                  displayBookDetails={props.displayBookDetails}
                 />
               </li>
             ))

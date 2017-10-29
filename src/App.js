@@ -3,15 +3,20 @@ import { Route } from 'react-router-dom'
 import * as BooksAPI from './utils/BooksAPI'
 import SearchBooks from './SearchBooks'
 import ListBooks from './ListBooks'
+import BookDetails from './BookDetails'
 import './App.css'
 
 class BooksApp extends React.Component {
   constructor() {
     super();
     this.state = {
-      books: []
+      books: [],
+      bookDetails: {},
+      displayDetails: false
     };
     this.updateShelf = this.updateShelf.bind(this);
+    this.displayBookDetails = this.displayBookDetails.bind(this);
+    this.updateBookDetails = this.updateBookDetails.bind(this);
   }
 
   componentDidMount() {
@@ -41,11 +46,11 @@ class BooksApp extends React.Component {
         if (index === -1) {
           BooksAPI.get(book.id).then((newBook) => {
             updatedBooks.push(newBook);
-            { books: updatedBooks };
+            return { books: updatedBooks };
           })
         } else {
           updatedBooks[index].shelf = shelf;
-          { books: updatedBooks };
+          return { books: updatedBooks };
         }
       })
     }
@@ -55,20 +60,51 @@ class BooksApp extends React.Component {
     })
   }
 
+  displayBookDetails(book) {
+    if (this.state.displayDetails) {
+      this.setState( (state) => (
+        {displayDetails: !state.displayDetails, bookDetails: {}}
+      ))
+    } else {
+      let index = this.state.books.findIndex( (b) => b.id === book.id);
+      this.setState( (state) => (
+        {displayDetails: !state.displayDetails, bookDetails: state.books[index]}
+      ))
+    }
+  }
+
+  updateBookDetails(id, rating, notes) {
+    let index = this.state.books.findIndex( (b) => b.id === id);
+    var updatedBooks = this.state.books;
+    updatedBooks[index].rating = rating;
+    updatedBooks[index].notes = notes;
+    
+    this.setState( (state) => (
+      {books: updatedBooks}
+    ))
+  }
+
   render() {
     console.log("render");
+    var bookDetails = undefined;
+    if (this.state.displayDetails) {
+      bookDetails = <BookDetails book={this.state.bookDetails} toggleBookDetails={this.displayBookDetails} updateBookDetails={this.updateBookDetails}/>
+    }
     return (
       <div className="app">
+        {bookDetails}
         <Route exact path="/" render={() => (
           <ListBooks
             books={this.state.books}
             updateBookShelf={this.updateShelf}
+            displayBookDetails={this.displayBookDetails}
           />
         )}/>
         <Route path='/search' render={() => (
           <SearchBooks
             books={this.state.books}
             updateBookShelf={this.updateShelf}
+            displayBookDetails={this.displayBookDetails}
           />
         )}/>
       </div>

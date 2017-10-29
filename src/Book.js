@@ -6,24 +6,34 @@ class Book extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      shelf: ""
+      shelf: "",
+      notes: "",
+      rating: -1,
     };
   }
 
   componentDidMount() {
-    this.setState( {shelf: this.props.shelf} );
+    this.setState( {shelf: this.props.shelf, rating: this.props.rating, notes: this.props.notes} );
   }
 
   updateShelf(shelf) {
-    this.setState({shelf});
+    this.setState({ shelf });
     this.props.updateBookShelf(this.props, shelf);
+  }
+
+  updateRating(rating) {
+    this.setState({ rating });
+  }
+
+  updateNotes(notes) {
+      this.setState({ notes });
   }
 
   render () {
     return (
       <div className="book">
         <div className="book-top">
-          <div className="book-cover" style={ { width: 128, height: 193, backgroundImage: `url(${this.props.coverImgURL})` }}></div>
+          <div className="book-cover" onClick={() => this.props.displayBookDetails(this.props)} style={ { width: 128, height: 193, backgroundImage: `url(${this.props.coverImgURL})` }}></div>
           <div className="book-shelf-changer">
             <select value={this.state.shelf} onChange={(event) => this.updateShelf(event.target.value)}>
               <option value="none">Move to...</option>
