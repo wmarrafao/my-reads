@@ -177,6 +177,7 @@ div.book-cover:hover {
 }
 
 /* book details pop-up */
+/* portions of the following code were extracted from: https://codepen.io/imprakash/embed/GgNMXO/?height=265&theme-id=0&default-tab=css,result&embed-version=2*/
 .overlay {
   position: fixed;
   top: 0;
